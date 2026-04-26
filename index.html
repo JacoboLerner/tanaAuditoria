@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+</head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Worklist - Tana Auditoría</title>
@@ -1121,6 +1123,33 @@
     color: #c1c1c1;
     margin-top: 2px;
   }
+
+  /* Mensaje de éxito del feedback */
+.feedback-success-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.feedback-success-msg svg {
+  color: #10b981; /* Verde éxito */
+  margin-bottom: 8px;
+}
+
+.feedback-success-msg span {
+  font-size: 13px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -1287,8 +1316,7 @@
               </div>
               <!-- Meta row -->
               <div class="tana-footer-meta-row">
-                <span class="tana-footer-meta">Generado por Tana · v2.4</span>
-                <span class="tana-footer-meta">● Análisis completo</span>
+                <span class="tana-footer-meta">Tana puede contener imprecisiones, verificá las respuestas.</span>
               </div>
             </div>
           </div>
@@ -1360,8 +1388,7 @@
             </div>
             <!-- Meta row -->
             <div class="tana-footer-meta-row">
-              <span class="tana-footer-meta">Generado por Tana · v2.4</span>
-              <span class="tana-footer-meta">● Análisis completo</span>
+              <span class="tana-footer-meta">Tana puede contener imprecisiones, verificá las respuestas.</span>
             </div>
           </div>
         </div>
@@ -1776,7 +1803,7 @@ const STEPS = [
 
 // Datos del caso actual (se usarán en el modal de comentario)
 const CASO_DATA = {
-  id: '4660434',
+  id: '6312432',
   caso: 'HCE 4444531 · Solicitud 6312432',
 };
 
@@ -1962,6 +1989,7 @@ modalOverlay.addEventListener('click', (e) => {
 });
 
 // Enviar comentario (placeholder — aquí iría la integración con Google Forms o API)
+// Enviar comentario (placeholder — aquí iría la integración con Google Forms o API)
 modalSubmit.addEventListener('click', () => {
   const comentario = modalComment.value.trim();
   if (!comentario) {
@@ -1970,17 +1998,39 @@ modalSubmit.addEventListener('click', () => {
     setTimeout(() => modalComment.style.borderColor = '', 1500);
     return;
   }
-  // Acá se podría hacer un fetch a Google Forms o endpoint interno
-  console.log('Feedback enviado:', {
-    id: modalId.value,
-    caso: modalCaso.value,
-    comentario,
-  });
-  closeCommentModal();
-  // Feedback visual de envío exitoso (podría mejorarse con toast)
-  const btn = modalSubmit;
-  btn.textContent = '✓ Enviado';
-  setTimeout(() => btn.textContent = 'Enviar', 1500);
+
+  // Simulación de envío (Acá se podría hacer un fetch a tu endpoint)
+  console.log('Feedback enviado:', { id: modalId.value, caso: modalCaso.value, comentario, });
+
+  const modalContainer = document.querySelector('.comment-modal');
+  const originalChildren = Array.from(modalContainer.children);
+
+  // 1. Ocultamos todo el contenido original del modal
+  originalChildren.forEach(child => child.style.display = 'none');
+
+  // 2. Creamos e insertamos el cartel de éxito
+  const successDiv = document.createElement('div');
+  successDiv.className = 'feedback-success-msg';
+  successDiv.innerHTML = `
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span style="font-size: 15px; margin-top: 12px; display: block; color: var(--text-dark);">¡Comentario enviado con éxito!</span>
+  `;
+  modalContainer.appendChild(successDiv);
+
+  // 3. Esperamos 2.5 segundos, cerramos el modal y restauramos su estado original
+  setTimeout(() => {
+    closeCommentModal();
+    
+    // Restaurar los elementos por si el usuario quiere comentar otra cosa después
+    setTimeout(() => {
+      successDiv.remove();
+      originalChildren.forEach(child => child.style.display = '');
+      modalComment.value = ''; // Limpiar el área de texto
+    }, 300); // Esperar a que la animación de cierre del modal termine
+  }, 2500);
 });
 
 // Tecla Escape para cerrar el modal
@@ -2150,6 +2200,8 @@ document.getElementById('btn-save').addEventListener('click', function() {
    INIT
    ══════════════════════════════════════════════════════════════ */
 applyMock(1);
+
+
 </script>
 
 </body>
