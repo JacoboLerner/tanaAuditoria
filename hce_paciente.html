@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCE - Hospital Italiano</title>
+    <style>
+        :root {
+            --verde: #2d6a4f;
+            --verde-dark: #018463;
+            --verde-header: #1e3a2f;
+            --verde-light: #e8f4f0;
+            --gris-bg: #eaeaea;
+            --gris-borde: #c8c8c8;
+            --gris-panel: #f5f5f5;
+            --texto: #222;
+            --texto-medio: #555;
+            --rojo: #c0392b;
+            --rojo-badge: #e74c3c;
+            --blanco: #ffffff;
+            --panel-header: #666666;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--gris-bg);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 12px;
+            color: var(--texto);
+        }
+
+        /* ═══════════════════════════════════════
+           TOP HEADER - barra verde oscura superior
+        ═══════════════════════════════════════ */
+        .top-header {
+            background-color: var(--verde-dark);
+            color: white;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-cross {
+            width: 28px;
+            height: 28px;
+            position: relative;
+        }
+
+        .logo-cross svg { width: 28px; height: 28px; }
+
+        .hospital-name {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notif-badge {
+            background: var(--rojo-badge);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        /* ═══════════════════════════════════════
+           BARRA FILIACIÓN PACIENTE
+        ═══════════════════════════════════════ */
+        .filiacion-bar {
+            background-color: var(--verde-dark);
+            color: white;
+            padding: 6px 12px 6px 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .paciente-foto {
+            width: 72px;
+            height: 72px;
+            background: #4a7c6f;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .paciente-info {
+            flex: 1;
+        }
+
+        .paciente-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .paciente-subtitulo {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .paciente-datos-grid {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+        }
+
+        .dato-item strong { opacity: 0.7; font-weight: normal; }
+
+        .vitales-area {
+            display: flex;
+            gap: 20px;
+            background: rgba(255,255,255,0.08);
+            padding: 6px 14px;
+            border-radius: 4px;
+            align-items: center;
+        }
+
+        .vital-block { text-align: center; }
+        .vital-valor { font-size: 22px; font-weight: bold; line-height: 1; }
+        .vital-label { font-size: 10px; opacity: 0.7; }
+        .vital-sub { font-size: 11px; }
+
+        .alertas-area {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: 180px;
+        }
+
+        .alerta-titulo {
+            font-size: 10px;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        .alerta-item {
+            font-size: 11px;
+            color: #ff8a80;
+            font-weight: 500;
+        }
+
+        .alert-upi {
+            background: var(--rojo);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #ff8a80;
+        }
+
+        .recom-icon {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        /* ═══════════════════════════════════════
+           LAYOUT PRINCIPAL
+        ═══════════════════════════════════════ */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ═══════════════════════════════════════
+           SIDEBAR
+        ═══════════════════════════════════════ */
+        .sidebar {
+            width: 130px;
+            background-color: var(--verde-dark);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 6px 0 2px;
+            color: rgba(255,255,255,0.5);
+            font-size: 9px;
+            text-transform: uppercase;
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-item {
+            padding: 7px 10px;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: #6fcf97;
+            color: white;
+            font-weight: 600;
+        }
+
+        .sidebar-icon { font-size: 13px; flex-shrink: 0; }
+
+        /* ═══════════════════════════════════════
+           ÁREA DE CONTENIDO
+        ═══════════════════════════════════════ */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Grid de paneles */
+        .panels-grid-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr 300px;
+            gap: 6px;
+            min-height: 200px;
+        }
+
+        .panels-grid-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        /* ═══════════════════════════════════════
+           PANEL / WIDGET
+        ═══════════════════════════════════════ */
+        .panel {
+            background: var(--blanco);
+            border: 1px solid var(--gris-borde);
+            border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .panel-header {
+            background: var(--panel-header);
+            color: white;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .panel-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .panel-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+
+        .panel-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+
+        .panel-nav {
+            font-size: 10px;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .panel-nav a {
+            color: #6fcf97;
+            text-decoration: none;
+            font-size: 10px;
+        }
+
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           PROBLEMAS Y PROCEDIMIENTOS
+        ═══════════════════════════════════════ */
+        .problema-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .problema-item:last-child { border-bottom: none; }
+
+        .badge-ac {
+            background: var(--rojo);
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 1px 4px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .problema-nombre {
+            flex: 1;
+            font-size: 11px;
+        }
+
+        .problema-info-btn {
+            width: 16px;
+            height: 16px;
+            background: #2196F3;
+            color: white;
+            border-radius: 50%;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           EVOLUCIONES
+        ═══════════════════════════════════════ */
+        .evolucion-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 6px;
+        }
+
+        .evol-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--verde);
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .evol-dot.rojo { background: var(--rojo); }
+
+        .evol-content { flex: 1; }
+
+        .evol-fecha {
+            font-size: 10px;
+            color: var(--texto-medio);
+        }
+
+        .evol-profesional {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--verde-dark);
+        }
+
+        .evol-especialidad {
+            font-size: 10px;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* ═══════════════════════════════════════
+           EVALUACIÓN PREQUIRÚRGICA (derecha)
+        ═══════════════════════════════════════ */
+        .prequirurgica-card {
+            background: #fff9e6;
+            border: 1px solid #f0c040;
+            border-radius: 3px;
+            padding: 8px 10px;
+            margin: 6px;
+            font-size: 11px;
+        }
+
+        .prequirurgica-titulo {
+            font-weight: bold;
+            font-size: 11px;
+            color: var(--rojo);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .prequirurgica-dato {
+            display: flex;
+            gap: 6px;
+            padding: 2px 0;
+            border-bottom: 1px solid #f0e0a0;
+        }
+
+        .prequirurgica-dato:last-child { border-bottom: none; }
+        .pq-label { color: #888; width: 80px; flex-shrink: 0; }
+
+        /* ═══════════════════════════════════════
+           RESUMEN CLÍNICO
+        ═══════════════════════════════════════ */
+        .resumen-layout {
+            display: flex;
+            height: 100%;
+        }
+
+        .resumen-fechas {
+            width: 120px;
+            border-right: 1px solid var(--gris-borde);
+            overflow-y: auto;
+        }
+
+        .resumen-fecha-item {
+            padding: 5px 8px;
+            font-size: 10px;
+            color: var(--texto-medio);
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .resumen-fecha-item:hover { background: var(--verde-light); }
+        .resumen-fecha-item.active { background: var(--verde-light); color: var(--verde-dark); font-weight: bold; }
+
+        .resumen-texto {
+            flex: 1;
+            padding: 8px;
+            font-size: 11px;
+            color: var(--texto-medio);
+            overflow-y: auto;
+        }
+
+        /* ═══════════════════════════════════════
+           NOTAS
+        ═══════════════════════════════════════ */
+        .nota-item {
+            padding: 6px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 11px;
+        }
+
+        .nota-meta {
+            color: #888;
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+
+        .nota-profesional { font-weight: 600; }
+
+        .nota-badge-pub {
+            background: #e0e0e0;
+            padding: 1px 5px;
+            border-radius: 8px;
+            font-size: 9px;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        .nota-texto { color: #555; }
+
+        /* ═══════════════════════════════════════
+           INDICACIONES
+        ═══════════════════════════════════════ */
+        .indicacion-item {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 11px;
+        }
+
+        .ind-fecha {
+            font-size: 10px;
+            color: #888;
+            display: inline;
+        }
+
+        .ind-nombre {
+            font-weight: 600;
+            color: var(--verde-dark);
+        }
+
+        /* ═══════════════════════════════════════
+           BOTONES PANEL FOOTER
+        ═══════════════════════════════════════ */
+        .panel-footer {
+            padding: 5px 10px;
+            border-top: 1px solid var(--gris-borde);
+            display: flex;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .btn-agregar {
+            background: var(--verde);
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .btn-agregar:hover { background: var(--verde-dark); }
+
+    </style>
+</head>
+<body>
+
+    <!-- ════════ HEADER SUPERIOR ════════ -->
+    <header class="top-header">
+        <div class="logo-area">
+            <div class="logo-cross">
+                <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="2" width="8" height="24" fill="white"/>
+                    <rect x="2" y="10" width="24" height="8" fill="white"/>
+                    <rect x="10" y="2" width="8" height="24" fill="#c0392b" opacity="0.7"/>
+                    <rect x="2" y="10" width="24" height="8" fill="#c0392b" opacity="0.7"/>
+                </svg>
+            </div>
+            <span class="hospital-name">Hospital Italiano</span>
+        </div>
+        <div class="header-right">
+            <button class="header-btn">
+                📚 Bases de Conocimiento ▾
+            </button>
+            <div style="display:flex;align-items:center;gap:5px;">
+                <span style="font-size:16px;">🔔</span>
+                <div class="notif-badge">93</div>
+            </div>
+            <div class="user-area">
+                <div class="user-avatar">👤</div>
+                <span>Lerner Rojas Jacobo Tomas</span>
+                <span style="opacity:0.5">▾</span>
+            </div>
+            <span style="font-size:16px;cursor:pointer;opacity:0.7">⏻</span>
+        </div>
+    </header>
+
+    <!-- ════════ BARRA FILIACIÓN ════════ -->
+    <div class="filiacion-bar">
+        <div class="paciente-foto">👤</div>
+
+        <div class="paciente-info">
+            <div class="paciente-nombre">Perez, Juan Gabriel</div>
+            <div class="paciente-subtitulo">51 Años (01-Jan-1975)</div>
+            <div class="paciente-datos-grid">
+                <div class="dato-item"><strong>NHC:</strong> 541150244587</div>
+                <div class="dato-item"><strong>ID H.I.:</strong> 2901520</div>
+                <div class="dato-item"><strong>Cobertura:</strong> Privado Arancel Hi</div>
+                <div class="dato-item"><strong>Plan:</strong> Único</div>
+                <div class="dato-item"><strong>Nro afiliado:</strong> 11</div>
+            </div>
+        </div>
+
+        <div class="vitales-area">
+            <div class="vital-block">
+                <div class="vital-label">BMI</div>
+                <div class="vital-valor">23.8</div>
+            </div>
+            <div style="opacity:0.3">|</div>
+            <div class="vital-block">
+                <div class="vital-label">Recordatorios</div>
+                <div style="font-size:18px;">🔔</div>
+            </div>
+            <div style="opacity:0.3">|</div>
+            <div class="vital-block">
+                <div class="vital-label">Grupo y factor</div>
+                <div class="vital-valor" style="font-size:18px;">O−</div>
+            </div>
+            <div style="opacity:0.3">|</div>
+            <div>
+                <div class="vital-label">Peso &nbsp; Talla</div>
+                <div class="vital-sub">77 &nbsp;&nbsp;&nbsp; 1.8</div>
+            </div>
+        </div>
+
+        <div class="alertas-area">
+            <div class="alerta-titulo">Alergias ⓘ</div>
+            <div class="alerta-item">Cefalexina</div>
+            <div class="alerta-item">Dipirona</div>
+            <div class="alerta-item">Amoxicilina</div>
+            <div style="font-size:10px;color:rgba(255,200,200,0.8);cursor:pointer;">Ver más</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+            <div class="alerta-titulo" style="text-align:center;">Alertas</div>
+            <div class="alert-upi">UPI<br><span style="font-size:9px;">Pamela</span></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <div class="alerta-titulo">Recomendaciones</div>
+            <div class="recom-icon">💡</div>
+        </div>
+    </div>
+
+    <!-- ════════ LAYOUT PRINCIPAL ════════ -->
+    <div class="main-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div style="height:6px;"></div>
+            <div class="sidebar-item">🚪 Salir</div>
+            <div style="height:4px;"></div>
+            <div class="sidebar-section">Ambulatorio</div>
+            <div class="sidebar-item">📋 Evaluación Inicial</div>
+            <div class="sidebar-item active">🏠 Resumen</div>
+            <div class="sidebar-item">⚠️ Problemas</div>
+            <div class="sidebar-item">📝 Evoluciones</div>
+            <div class="sidebar-item">🔗 Interconsultas</div>
+            <div class="sidebar-item">🔬 Estudios / Prácticas</div>
+            <div class="sidebar-item">📊 Resultados</div>
+            <div class="sidebar-item">🏥 Sub-Episodio Qx</div>
+            <div class="sidebar-item">💊 Indicaciones Médicas</div>
+            <div class="sidebar-item">💉 Protocolo de Infusión</div>
+            <div class="sidebar-item">💉 Vacunas</div>
+            <div class="sidebar-item">📁 Fichas</div>
+            <div class="sidebar-item">📞 Teleconsultas</div>
+            <div class="sidebar-item">✉️ Mensajes</div>
+            <div class="sidebar-item">📅 Volver a citar</div>
+            <div class="sidebar-item">💡 Sugerencias</div>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <div class="content-area">
+
+            <!-- FILA SUPERIOR: 3 columnas -->
+            <div class="panels-grid-top">
+
+                <!-- Panel: Problemas y Proc. Activos -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">Problemas y Proc. Activos</span>
+                        <div class="panel-actions">
+                            <button class="panel-btn">↺</button>
+                            <button class="panel-btn">✕</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">ALERGIA A CEFALEXINA</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">ALERGIA A DIPIRONA</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">CONTROL GINECOLÓGICO</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">ALERGIA A AMOXICILINA</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">ALERGIA A CIPROFLOXACINO</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">ALERGIA A IODO</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                        <div class="problema-item">
+                            <span class="badge-ac">AC</span>
+                            <span class="problema-nombre">ALERGIA A POLEN</span>
+                            <div class="problema-info-btn">i</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel: Evoluciones -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">Evoluciones</span>
+                        <div class="panel-actions">
+                            <div class="panel-nav">
+                                <button class="panel-btn">◀</button>
+                                <span>1 / 40</span>
+                                <button class="panel-btn">▶</button>
+                                <a href="#" style="color:#6fcf97;font-size:10px;margin-left:4px;">Ver todo</a>
+                            </div>
+                            <button class="panel-btn">↺</button>
+                            <button class="panel-btn">✕</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="evolucion-item">
+                            <div class="evol-dot"></div>
+                            <div class="evol-content">
+                                <div class="evol-fecha">29/04/26 10:11</div>
+                                <div class="evol-profesional">LERNER ROJAS JACOBO TOMAS</div>
+                                <div class="evol-especialidad">ÁREA DE INFORMÁTICA CLÍNICA</div>
+                            </div>
+                        </div>
+                        <div class="evolucion-item">
+                            <div class="evol-dot"></div>
+                            <div class="evol-content">
+                                <div class="evol-fecha">27/04/26 11:14</div>
+                                <div class="evol-profesional">KUPERSMIT DARIA CATERINA</div>
+                                <div class="evol-especialidad">ÁREA DE INFORMÁTICA CLÍNICA</div>
+                            </div>
+                        </div>
+                        <div class="evolucion-item">
+                            <div class="evol-dot"></div>
+                            <div class="evol-content">
+                                <div class="evol-fecha">30/03/26 21:24</div>
+                                <div class="evol-profesional">CRUZ CARROZZO ALEJANDRO</div>
+                                <div class="evol-especialidad">ÁREA DE INFORMÁTICA CLÍNICA</div>
+                            </div>
+                        </div>
+                        <div class="evolucion-item">
+                            <div class="evol-dot"></div>
+                            <div class="evol-content">
+                                <div class="evol-fecha">27/03/26 08:48</div>
+                                <div class="evol-profesional">KUPERSMIT DARIA CATERINA</div>
+                                <div class="evol-especialidad">ÁREA DE INFORMÁTICA CLÍNICA</div>
+                            </div>
+                        </div>
+                        <div class="evolucion-item">
+                            <div class="evol-dot"></div>
+                            <div class="evol-content">
+                                <div class="evol-fecha">26/03/26 09:55</div>
+                                <div class="evol-profesional">CRUZ CARROZZO ALEJANDRO</div>
+                                <div class="evol-especialidad">ÁREA DE INFORMÁTICA CLÍNICA</div>
+                            </div>
+                        </div>
+                        <div class="evolucion-item">
+                            <div class="evol-dot"></div>
+                            <div class="evol-content">
+                                <div class="evol-fecha">26/03/26 09:24</div>
+                                <div class="evol-profesional">CRUZ CARROZZO ALEJANDRO</div>
+                                <div class="evol-especialidad">ÁREA DE INFORMÁTICA CLÍNICA</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel: Evaluación Prequirúrgica -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title" style="color:#ffcc00;">EVALUACIÓN PREQUIRÚRGICA</span>
+                        <div class="panel-actions">
+                            <button class="panel-btn">↺</button>
+                            <button class="panel-btn">✕</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="prequirurgica-card">
+                            <div class="prequirurgica-titulo">
+                                🗂️ Solicitud de PREQUIRÚRGICO
+                            </div>
+                            <div class="prequirurgica-dato">
+                                <span class="pq-label">Ámbito:</span>
+                                <span>Int. General</span>
+                            </div>
+                            <div class="prequirurgica-dato">
+                                <span class="pq-label">Vigencia:</span>
+                                <span>29/04/2026</span>
+                            </div>
+                            <div class="prequirurgica-dato">
+                                <span class="pq-label">Tipo Anestesia:</span>
+                                <span>General</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FILA INFERIOR: 2 columnas -->
+            <div class="panels-grid-bottom">
+
+                <!-- Panel: Resumen Clínico -->
+                <div class="panel" style="min-height:180px;">
+                    <div class="panel-header">
+                        <span class="panel-title">Resumen Clínico</span>
+                        <div class="panel-actions">
+                            <button class="panel-btn">↺</button>
+                            <button class="panel-btn">✕</button>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display:flex;flex-direction:row;height:100%;">
+                        <div class="resumen-fechas">
+                            <div class="resumen-fecha-item active">13/01/25 15:22</div>
+                            <div class="resumen-fecha-item">31/08/24 19:28</div>
+                            <div class="resumen-fecha-item">28/06/20 18:15</div>
+                            <div class="resumen-fecha-item">09/01/20 08:22</div>
+                            <div class="resumen-fecha-item">03/01/20 08:56</div>
+                            <div class="resumen-fecha-item">05/11/19 09:08</div>
+                            <div class="resumen-fecha-item">05/11/19 09:08</div>
+                            <div class="resumen-fecha-item">10/07/19 09:31</div>
+                        </div>
+                        <div class="resumen-texto">
+                            <p><strong>Paciente con tos</strong></p>
+                            <br>
+                            <p>: Estamos probando funcionalidad.</p>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn-agregar">Agregar Resumen Clínico</button>
+                    </div>
+                </div>
+
+                <!-- Panel: Notas -->
+                <div class="panel" style="min-height:180px;">
+                    <div class="panel-header">
+                        <span class="panel-title">Notas</span>
+                        <div class="panel-actions">
+                            <button class="panel-btn">↺</button>
+                            <button class="panel-btn">✕</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="nota-item">
+                            <div class="nota-meta">26/02/2026 – <span class="nota-profesional">LEMA ESPINOSA CELESTE NICOLE</span> <span class="nota-badge-pub">Público</span></div>
+                            <div class="nota-texto">test</div>
+                        </div>
+                        <div class="nota-item">
+                            <div class="nota-meta">13/06/2025 – <span class="nota-profesional">RUBIN LUCIANA</span> <span class="nota-badge-pub">Público</span></div>
+                            <div class="nota-texto">Paciente paliativo, planificación de cuidado en XX.XX</div>
+                        </div>
+                        <div class="nota-item">
+                            <div class="nota-meta">31/08/2024 – <span class="nota-profesional">SARACHO JOSE PABLO OSCAR</span> <span class="nota-badge-pub">Público</span></div>
+                            <div class="nota-texto">Probando test</div>
+                        </div>
+                        <div class="nota-item">
+                            <div class="nota-meta">31/08/2024 – <span class="nota-profesional">SARACHO JOSE PABLO OSCAR</span> <span class="nota-badge-pub">Público</span></div>
+                            <div class="nota-texto">Probando test</div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn-agregar">Agregar nota</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FILA: Indicaciones (ancho completo) -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Indicaciones</span>
+                    <div class="panel-actions">
+                        <button class="panel-btn">↺</button>
+                        <button class="panel-btn">✕</button>
+                    </div>
+                </div>
+                <div class="panel-body" style="max-height:130px;">
+                    <div class="indicacion-item">
+                        <span class="ind-fecha">24/04/2026 – </span>
+                        <span class="ind-nombre">AMOXICILINA 500 MG/5 ML, SUSPENSION EN FRASCO DE 90 ML, ORAL</span>
+                    </div>
+                    <div class="indicacion-item">
+                        <span class="ind-fecha">21/04/2026 – </span>
+                        <span class="ind-nombre">AMIODARONA 200 MG, COMPRIMIDO, ORAL</span>
+                    </div>
+                    <div class="indicacion-item">
+                        <span class="ind-fecha">16/04/2026 – </span>
+                        <span class="ind-nombre">SILDENAFIL 50 MG, CÁPSULA, ORAL</span>
+                    </div>
+                    <div class="indicacion-item">
+                        <span class="ind-fecha">15/04/2026 – </span>
+                        <span class="ind-nombre">EQUIPO CPAP O AUTOCPAP · PRESION: NRO H2O · TIEMPO DE RAMPA: X MINUTOS · INICIO DE RAMPA: X NRO H2O · MONITOREO: TARJETA DE MEMORIA/TELEMONITOREO · TUBULADURA FLEXIBLE REHUSABLE O TUBULADURA DE HILO CALIENTE · TERMOHUMIDIFICADOR</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

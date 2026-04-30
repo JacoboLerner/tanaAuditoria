@@ -348,7 +348,38 @@
     0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
     50% { transform: scale(1.15) rotate(15deg); opacity: 0.85; }
   }
+/* Estilo para el botón HCE en la cabecera */
+.btn-hce-header {
+  background-color: #ffffff;
+  border: 0.5px solid #9ba8a6; /* Verde institucional */
+  border-radius: 6px;
+  padding: 2px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 15px; /* Separación del nombre */
+  transition: all 0.2s ease;
+  height: 32px;
+}
 
+.btn-hce-header:hover {
+  background-color: #f0f7f4;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+/* Ajuste para alinear los elementos en la cabecera */
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Evita que el botón tenga un contorno feo extra al hacerle clic */
+.btn-hce:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 89, 68, 0.3);
+}
   /* ── Ícono del botón Tana (robot SVG) ── */
   .tana-btn-icon {
     filter: invert(18%) sepia(50%) saturate(500%) hue-rotate(95deg) brightness(70%);
@@ -1173,15 +1204,20 @@
       <div class="mock-selector">
         <span class="mock-selector-label">Mock</span>
         <div class="mock-btns">
-          <button class="mock-btn active" id="mock-btn-1" title="Mock 1: Tana debajo del botón Guardar">1</button>
+          <button class="mock-btn " id="mock-btn-1" title="Mock 1: Tana debajo del botón Guardar">1</button>
           <button class="mock-btn"        id="mock-btn-2" title="Mock 2: Tana en pestaña dedicada">2</button>
         </div>
       </div>
     </div>
 
     <div class="user">
+      <a href="perfil.html" target="_blank" style="text-decoration: none;">
+    <button class="btn-hce-header" id="btn-hce-m2">
+      <img src="HCE_boton.png" width="140" height="25" alt="HCE">
+    </button>
+  </a>
       <div class="avatar">MP</div>
-      <span class="user-name">MARIA PILAR ANTON LLADO</span>
+      <span class="user-name">FALSO JUAN PEREZ</span>
       <span class="caret">▾</span>
     </div>
   </div>
@@ -1243,13 +1279,13 @@
       <h2 class="aside-title">Análisis</h2>
 
       <div class="aside-tabs">
-        <button class="aside-tab active" data-panel="panel-dictamen">Dictamen</button>
-        <button class="aside-tab"        data-panel="panel-actividad">Actividad</button>
-        <button class="aside-tab mock-2 hidden" data-panel="panel-tana-tab" id="aside-tab-tana">Tana Auditoría</button>
+        <button class="aside-tab mock-2 active " data-panel="panel-tana-tab" id="aside-tab-tana">Auditoría Inteligente</button>
+        <button class="aside-tab " data-panel="panel-dictamen">Dictamen</button>
+        <button class="aside-tab"  data-panel="panel-actividad">Actividad</button>
       </div>
 
       <!-- ── Panel: Dictamen ── -->
-      <div class="aside-panel active" id="panel-dictamen">
+      <div class="aside-panel" id="panel-dictamen">
         <div class="dictamen-title">Dictamen</div>
 
         <label class="radio-row"><input type="radio" name="dict"> Aprobada</label>
@@ -1334,7 +1370,7 @@
       </div>
 
       <!-- ── Panel: Tana Auditoría (Mock 2) ── -->
-      <div class="aside-panel mock-2 hidden" id="panel-tana-tab">
+      <div class="aside-panel mock-2 active" id="panel-tana-tab">
         <button class="btn btn-tana" id="btn-tana-m2">
           <img src="preview.svg" id="tana-fly-icon-m2" class="tana-btn-icon" width="18" height="18" alt="">
           Iniciar Tana auditoría
@@ -2199,7 +2235,7 @@ document.getElementById('btn-save').addEventListener('click', function() {
 /* ══════════════════════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════════════════════ */
-applyMock(1);
+applyMock(2);
 
 
 </script>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil de Usuario</title>
+<style>
+  /* Fondo general simulando el de tu imagen */
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Fondo negro arriba y un degradado gris/celeste abajo */
+    background: linear-gradient(to bottom, #000000 0%, #000000 45%, #7a8d9e 45%, #ffffff 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+  }
+
+  /* Tarjeta superior: Perfil del Doctor */
+  .tarjeta-perfil {
+    background-color: #1a1c1e; /* Gris muy oscuro */
+    border: 1px solid #333;
+    border-radius: 6px;
+    display: flex;
+    width: 650px;
+    max-width: 95%;
+    color: white;
+    margin-bottom: 15px;
+    overflow: hidden; /* Para que la foto no se salga de los bordes redondeados */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  /* Contenedor de la foto */
+  .foto-contenedor {
+    width: 140px;
+    background-color: #5d758a; /* Fondo azul grisáceo detrás de la foto */
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .foto-doctor {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  /* Información al lado de la foto */
+  .info-perfil {
+    padding: 25px 20px 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+
+  .info-perfil h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .logo-hospital {
+    width: 160px;
+    align-self: flex-end; /* Lo tira hacia la derecha */
+  }
+
+  /* Tarjeta inferior: Áreas Jerárquicas */
+  .tarjeta-areas {
+    background-color: #f8f9fa; /* Blanco roto/gris muy claro */
+    border-radius: 8px;
+    width: 650px;
+    max-width: 95%;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .tarjeta-areas h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: #000;
+  }
+
+  .lista-areas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+  }
+
+  .lista-areas li {
+    margin-bottom: 12px;
+  }
+
+  .lista-areas a {
+    color: #0056b3; /* Color azul de los links */
+    text-decoration: none;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .lista-areas a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+  <div class="tarjeta-perfil">
+    <div class="foto-contenedor">
+      <img src="fakedoctor.jpg" alt="Foto Dr. Lerner" class="foto-doctor">
+    </div>
+    <div class="info-perfil">
+      <h2>Dr. Falso Juan Perez</h2>
+      <img src="logohiba.png" alt="Hospital Italiano de Buenos Aires" class="logo-hospital">
+    </div>
+  </div>
+
+  <div class="tarjeta-areas">
+    <h3>Areas Jerarquicas</h3>
+    <ul class="lista-areas">
+      <li><a href="#">AREA DE INFORMATICA CLINICA</a></li>
+      <li><a href="#">AUDITORÍA</a></li>
+    </ul>
+  </div>
+<div id="cartel-exito" class="cartel-auditoria">
+  <span class="icon-check">✓</span>
+  Área jerárquica vinculada:<strong>Auditoría</strong>
+</div>
+
+<style>
+  /* Estilo del cartel de éxito */
+  .cartel-auditoria {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    animation: slideIn 1s ease-out;
+  }
+
+  .icon-check {
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+</style>
+
+<script>
+  // Lógica de redirección tras 5 segundos
+  window.onload = function() {
+    setTimeout(function() {
+      // Redirige a la nueva página en la misma pestaña
+      window.location.href = "hce_paciente.html";
+    }, 5000);
+  };
+</script>
+</body>
+</html>
