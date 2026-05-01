@@ -1233,14 +1233,19 @@
       <div class="patient-header">
         <button class="back-btn" aria-label="back">←</button>
         <div class="patient-info">
-          <h1>Gorosito Campos , Clara <span class="badge">Actualizada</span></h1>
-          <div class="patient-meta">
+          <h1 id="header-patient-name">Gorosito Campos , Clara <span class="badge">Actualizada</span></h1>
+          <div class="patient-meta" id="header-patient-meta">
             ID 4444531 | DNI 27081072 | Integrante<br>
             Solicitud: 6312432<br>
             Recepcion: 24/04/2026 15.18 hs<br>
             Fecha nacimiento: 07/08/1988
           </div>
         </div>
+        <div class="carousel-nav" style="margin-left: auto; display: flex; align-items: center; gap: 12px; background: #fff; padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <button id="btn-prev" style="border: none; background: transparent; font-size: 18px; cursor: pointer; color: var(--text-dark); transition: transform 0.1s;" title="Caso Anterior">&larr;</button>
+    <span id="case-indicator" style="font-size: 12px; font-weight: 600; color: var(--teal); width: 80px; text-align: center;">Caso 2 de 4</span>
+    <button id="btn-next" style="border: none; background: transparent; font-size: 18px; cursor: pointer; color: var(--text-dark); transition: transform 0.1s;" title="Siguiente Caso">&rarr;</button>
+  </div>
       </div>
 
       <div class="tabs">
@@ -1249,28 +1254,24 @@
         <button class="tab">Histórico de versiones</button>
       </div>
 
-      <div class="card">
-        <div class="card-title">Información provista por <b>DJ</b></div>
-        <div class="form-field">
-          <label>Nombre y Apellido</label>
-          <input type="text" value="CLARA GOROSITO">
-        </div>
-      </div>
+<div class="card">
+  <div class="card-title">Información provista por <b>DJ</b></div>
+  <div class="form-field">
+    <label>Nombre y Apellido</label>
+    <input type="text" id="input-dj-nombre" value="CLARA GOROSITO" readonly>
+  </div>
+</div>
 
       <div class="card">
         <div class="card-title">Información del titular</div>
         <div class="form-grid">
-          <div class="form-field"><label>Apellido</label><input type="text" value="Gorosito"></div>
-          <div class="form-field"><label>Otro apellido</label><input type="text" value="Campos"></div>
-          <div class="form-field"><label>Apellido materno</label><input type="text" value="Campos"></div>
-          <div class="form-field"><label></label><input type="text" style="visibility:hidden"></div>
-          <div class="form-field"><label>Nombre</label><input type="text" value="Clara"></div>
-          <div class="form-field"><label>Otro nombre</label><input type="text" value=""></div>
-          <div class="form-field"><label>Fecha de nacimiento</label><input type="text" value="07/08/2018"></div>
-          <div class="form-field"><label>Sexo</label><input type="text" value="Femenino"></div>
-          <div class="form-field"><label>Tipo de documento</label><input type="text" value="DNI"></div>
-          <div class="form-field"><label>Número de documento</label><input type="text" value="57081072"></div>
-        </div>
+  <div class="form-field"><label>Apellido</label><input type="text" id="input-apellido" value="Gorosito" readonly></div>
+  <div class="form-field"><label>Nombre</label><input type="text" id="input-nombre" value="Clara" readonly></div>
+  <div class="form-field"><label>Fecha de nacimiento</label><input type="text" id="input-dob" value="07/08/1990" readonly></div>
+  <div class="form-field"><label>Sexo</label><input type="text" id="input-sexo" value="Femenino" readonly></div>
+  <div class="form-field"><label>Tipo de documento</label><input type="text" value="DNI" readonly></div>
+  <div class="form-field"><label>Número de documento</label><input type="text" id="input-doc" value="35111222" readonly></div>
+</div>
       </div>
     </div>
 
@@ -1733,8 +1734,8 @@
     </table>
   </div>
 
-  <div class="risk-section">
-    <div class="risk-section-header" style="color: #047857; border-bottom: 1px solid #a7f3d0;">🟢 Bajo</div>
+  <div class="risk-section bajo">
+    <div class="risk-section-header bajo">🟢 Bajo</div>
     <table class="audit-table">
       <thead>
         <tr>
@@ -1904,7 +1905,8 @@ function runTanaStream(panel, openOnStart = false) {
       clearInterval(interval);
       streamingEl.style.display = 'none';
       contentEl.classList.remove('stream-hidden');
-      injectAnalysisContent(contentEl);
+      contentEl.innerHTML = currentTanaOutput;
+      contentEl.style.display = 'block';
       
       // 3. Volvemos a mostrar los dedos usando 'flex' (como en tu CSS original) 
       // SOLO cuando el texto ya está generado
@@ -2239,6 +2241,601 @@ document.getElementById('btn-save').addEventListener('click', function() {
    ══════════════════════════════════════════════════════════════ */
 applyMock(2);
 
+/* =====================================================================
+   LÓGICA DEL CARRUSEL DE 4 CASOS (SIN ROMPER EL MOCK ORIGINAL)
+   ===================================================================== */
+
+/* =====================================================================
+   LÓGICA DEL CARRUSEL DE 4 CASOS (SIN ROMPER EL MOCK ORIGINAL)
+   ===================================================================== */
+const casosAudit = [
+  { // 🟢 CASO 1: OBJETIVO
+    index: 0,
+    header: { name: "Objetivo, Juan", badge: "Actualizada", meta: "ID 1111111 | DNI 38111222 | Titular<br>Solicitud: 6312431<br>Recepción: 23/04/2026 09.30 hs<br>Fecha nacimiento: 12/05/1995" },
+    form: { apellido: "Objetivo", nombre: "Juan", dob: "12/05/1995", sexo: "Masculino", doc: "38111222", djNombre: "JUAN OBJETIVO" },
+    tanaHtml: `
+      <div class="audit-header">
+        <strong>Paciente 1111111</strong><br>
+        Edad: 28 años &nbsp;·&nbsp; Sexo: Masculino &nbsp;·&nbsp; BMI: 23.1 (Normal) &nbsp;·&nbsp; Fecha: 19/04/2024<br>
+        Evoluciones totales: 5 &nbsp;·&nbsp; Período: 2020 – 2024
+      </div>
+
+      <div class="dictamen-block">
+        <div class="dictamen-estado aprobado" style="color: #065f46; background: #ecfdf5; border: 1px solid #6ee7b7;">
+          <span class="icon">🟢</span> OBJETIVO
+        </div>
+        <div class="justificacion-block">
+          <div class="justificacion-label">Justificación</div>
+          Paciente joven sin antecedentes patológicos de relevancia. Controles de salud anuales dentro de parámetros normales. No registra medicación crónica ni internaciones.<br><br>Riesgo prestacional nulo en base a la evidencia actual.
+        </div>
+      </div>
+
+      <div class="risk-section-header" style="color: #047857; border-bottom: 1px solid #a7f3d0; margin-top: 15px;">Hallazgos</div>
+      <div class="risk-section">
+        <div class="risk-section-header bajo" style="color: #047857;">🟢 Bajo</div>
+        <table class="audit-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hallazgo</th><th>Módulo</th><th>Servicio</th><th>Categoría</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>15/03/2023</td>
+              <td class="hallazgo-cell"><strong>Control de salud normal</strong></td>
+              <td>Evoluciones</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Preventivo</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="audit-disclaimer">
+        ⚠️ Recomendación de apoyo. Decisión final responsabilidad exclusiva del auditor médico habilitado.
+      </div>
+    `
+  },
+  { // 🔴 CASO 2: NO OBJETIVO (CÓDIGO EXACTO PROVISTO POR TI)
+    index: 1,
+    header: { name: "No objetivo Campos, Clara", badge: "Actualizada", meta: "ID 4444531 | DNI 27081072 | Integrante<br>Solicitud: 6312432<br>Recepción: 24/04/2026 15.18 hs<br>Fecha nacimiento: 07/08/1988" },
+    form: { apellido: "No objetivo Campos", nombre: "Clara", dob: "07/08/1988", sexo: "Femenino", doc: "27081072", djNombre: "CLARA NO OBJETIVO CAMPOS" },
+    tanaHtml: `
+      <div class="audit-header">
+        <strong>Paciente 4444531</strong><br>
+        Edad: 33 años &nbsp;·&nbsp; Sexo: Femenino &nbsp;·&nbsp; BMI: 21.6 (Normal) &nbsp;·&nbsp; Fecha: 19/04/2024<br>
+        Evoluciones totales: 20 &nbsp;·&nbsp; Período: 10/06/2018 – 19/04/2024
+      </div>
+
+      <div class="dictamen-block">
+        <div class="dictamen-estado rechazado">
+          <span class="icon">🔴</span> NO OBJETIVO
+        </div>
+        <div class="justificacion-block">
+          <div class="justificacion-label">Justificación</div>
+          Paciente con antecedentes psiquiátricos de alto impacto: <strong>trastorno depresivo mayor crónico</strong> con internación previa (2010), <strong>consumo de sustancias</strong> (cocaína, pasta base), <strong>episodios autolesivos</strong> (cortes en brazos/piernas/muñecas), <strong>ideas de muerte recurrentes</strong> y <strong>crisis de pánico con agorafobia</strong>.<br><br>
+          Requiere <strong>tratamiento psicofarmacológico crónico</strong> con drogas centinela: <strong>sertralina, risperidona, clonazepam, eszopiclona</strong>. Presenta <strong>bajo peso corporal crónico</strong> (BMI 19.1-19.4) con seguimiento nutricional por dificultad para recuperar peso desde adolescencia.<br><br>
+          Antecedente de <strong>hiperemesis gravídica severa</strong> con múltiples internaciones (2020) y <strong>aborto incompleto</strong> (2022). Alto consumo de servicios de salud mental con <strong>múltiples ausencias a controles</strong> y <strong>episodios de fuga hospitalaria</strong>.
+        </div>
+      </div>
+
+      <div class="risk-section">
+        <div class="risk-section-header critica">Alertas Específicas</div>
+        
+        <div class="alert-block critica">
+          <span class="alert-icon">🚨</span>
+          <span class="alert-text"><strong>Trastorno depresivo mayor crónico con riesgo suicida histórico</strong></span>
+        </div>
+        <div class="alert-block critica">
+          <span class="alert-icon">🚨</span>
+          <span class="alert-text"><strong>Tratamiento psiquiátrico crónico con drogas de alto costo (risperidona, eszopiclona)</strong></span>
+        </div>
+        <div class="alert-block critica">
+          <span class="alert-icon">🚨</span>
+          <span class="alert-text"><strong>Antecedente de consumo de sustancias múltiples (cocaína, pasta base, pastillas)</strong></span>
+        </div>
+        <div class="alert-block critica">
+          <span class="alert-icon">🚨</span>
+          <span class="alert-text"><strong>Episodios autolesivos recurrentes (cortes) — último episodio 2019</strong></span>
+        </div>
+        <div class="alert-block critica">
+          <span class="alert-icon">🚨</span>
+          <span class="alert-text"><strong>Bajo peso corporal crónico (BMI 19.1-19.4) con sarcopenia documentada</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Anemia ferropénica recurrente (ferritina 10.9-13.3 ng/mL)</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Hiperemesis gravídica severa con internaciones múltiples (2020)</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Aborto incompleto con seguimiento prolongado (2022)</strong></span>
+        </div>
+      </div>
+
+      <div class="risk-section">
+        <div class="risk-section-header warning" style="color: #92400e; border-bottom: 1px solid #fcd34d;">Alertas Adicionales</div>
+        
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Internación psiquiátrica previa (2010, 3 meses) por depresión y consumo de sustancias</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Crisis de pánico con agorafobia — dificultad para salir del domicilio</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Antecedente familiar de suicidio (tío paterno, mayo 2019)</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Múltiples ausencias a controles médicos y psiquiátricos</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Episodios de fuga hospitalaria documentados (2019, 2023)</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Adherencia irregular a tratamiento psicofarmacológico</strong></span>
+        </div>
+        <div class="alert-block" style="background:#f3f4f6; border-left:3px solid #9ca3af;">
+          <span class="alert-icon">ℹ️</span>
+          <span class="alert-text" style="color:#4b5563;"><strong>Tabaquismo suspendido en 2023</strong> (fumaba 3 cigarrillos/día)</span>
+        </div>
+        <div class="alert-block" style="background:#f3f4f6; border-left:3px solid #9ca3af;">
+          <span class="alert-icon">ℹ️</span>
+          <span class="alert-text" style="color:#4b5563;"><strong>Alcohol ocasional</strong>, consumo esporádico de marihuana (negado actualmente)</span>
+        </div>
+      </div>
+      
+      <div class="risk-section-header warning" style="color: #92400e; border-bottom: 1px solid #fcd34d;">Hallazgos</div>
+      <div class="risk-section critica">
+        <div class="risk-section-header critica1">🔴 Alto</div>
+        <table class="audit-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hallazgo</th><th>Módulo</th><th>Servicio</th><th>Categoría</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>11/11/2019</td>
+              <td class="hallazgo-cell"><strong>Trastorno depresivo mayor crónico</strong> con ideas de muerte</td>
+              <td>Evoluciones</td>
+              <td>Psiquiatría</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>30/10/2019</td>
+              <td class="hallazgo-cell"><strong>Episodios autolesivos</strong> (cortes superficiales)</td>
+              <td>Evoluciones</td>
+              <td>Psiquiatría</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>30/10/2019</td>
+              <td class="hallazgo-cell"><strong>Internación psiquiátrica</strong> (2010, 3 meses)</td>
+              <td>Evoluciones</td>
+              <td>Psiquiatría</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>30/10/2019</td>
+              <td class="hallazgo-cell"><strong>Consumo de sustancias</strong> (cocaína, pasta base, pastillas)</td>
+              <td>Evoluciones</td>
+              <td>Psiquiatría</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>11/11/2019</td>
+              <td class="hallazgo-cell"><strong>Crisis de pánico con agorafobia</strong></td>
+              <td>Evoluciones</td>
+              <td>Psiquiatría</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>27/02/2020</td>
+              <td class="hallazgo-cell"><strong>Abandono abrupto</strong> de medicación psiquiátrica</td>
+              <td>Evoluciones</td>
+              <td>Psiquiatría</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>23/10/2020</td>
+              <td class="hallazgo-cell"><strong>Hiperemesis gravídica severa</strong> con internación</td>
+              <td>Evoluciones</td>
+              <td>Obstetricia</td>
+              <td><span class="cat-badge">Metabólico</span></td>
+            </tr>
+            <tr>
+              <td>05/11/2020</td>
+              <td class="hallazgo-cell"><strong>Episodio de intensa angustia</strong> en internación</td>
+              <td>Evoluciones</td>
+              <td>Obstetricia</td>
+              <td><span class="cat-badge">Salud Mental</span></td>
+            </tr>
+            <tr>
+              <td>22/08/2022</td>
+              <td class="hallazgo-cell"><strong>Aborto incompleto</strong> con seguimiento prolongado</td>
+              <td>Evoluciones</td>
+              <td>Obstetricia</td>
+              <td><span class="cat-badge">Ginecológico</span></td>
+            </tr>
+            <tr>
+              <td>29/03/2019</td>
+              <td class="hallazgo-cell"><strong>Bajo peso corporal crónico</strong> (BMI 19.1) / sarcopenia</td>
+              <td>Evoluciones</td>
+              <td>Nutrición</td>
+              <td><span class="cat-badge">Metabólico</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="risk-section medio">
+        <div class="risk-section-header medio">🟡 Medio</div>
+        <table class="audit-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hallazgo</th><th>Módulo</th><th>Servicio</th><th>Categoría</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>03/06/2021</td>
+              <td class="hallazgo-cell"><strong>Anemia ferropénica</strong> (Hb 10.7, ferritina 10.9)</td>
+              <td>Laboratorio</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Hematológico</span></td>
+            </tr>
+            <tr>
+              <td>19/04/2024</td>
+              <td class="hallazgo-cell"><strong>Ferritina baja</strong> (30.9 ng/mL)</td>
+              <td>Laboratorio</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Hematológico</span></td>
+            </tr>
+            <tr>
+              <td>26/04/2021</td>
+              <td class="hallazgo-cell"><strong>Fosfatasa alcalina elevada</strong> (137-149 UI/L)</td>
+              <td>Laboratorio</td>
+              <td>Obstetricia</td>
+              <td><span class="cat-badge">Metabólico</span></td>
+            </tr>
+            <tr>
+              <td>19/04/2024</td>
+              <td class="hallazgo-cell"><strong>Eosinofilia leve</strong> (7.23%)</td>
+              <td>Laboratorio</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Hematológico</span></td>
+            </tr>
+            <tr>
+              <td>19/04/2024</td>
+              <td class="hallazgo-cell"><strong>Rinitis alérgica crónica</strong> con tratamiento</td>
+              <td>Evoluciones</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Respiratorio</span></td>
+            </tr>
+            <tr>
+              <td>08/07/2025</td>
+              <td class="hallazgo-cell"><strong>Hernia umbilical</strong> (8.5 mm) indicación quir.</td>
+              <td>Evoluciones</td>
+              <td>Cirugía Gral</td>
+              <td><span class="cat-badge">Quirúrgico</span></td>
+            </tr>
+            <tr>
+              <td>19/03/2024</td>
+              <td class="hallazgo-cell"><strong>Reflujo gastroesofágico</strong> sin tratamiento</td>
+              <td>Evoluciones</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Digestivo</span></td>
+            </tr>
+            <tr>
+              <td>27/02/2020</td>
+              <td class="hallazgo-cell"><strong>Vértigo y mareos</strong> (3 semanas)</td>
+              <td>Evoluciones</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Neurológico</span></td>
+            </tr>
+            <tr>
+              <td>04/09/2020</td>
+              <td class="hallazgo-cell"><strong>Gastroenteritis aguda</strong></td>
+              <td>Evoluciones</td>
+              <td>Clínica Médica</td>
+              <td><span class="cat-badge">Digestivo</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="risk-section">
+        <div class="risk-section-header bajo" style="color: #047857; border-bottom: 1px solid #a7f3d0;">🟢 Bajo</div>
+        <table class="audit-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hallazgo</th><th>Módulo</th><th>Servicio</th><th>Categoría</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>12/05/2021</td>
+              <td class="hallazgo-cell"><strong>Parto vaginal</strong> sin complicaciones</td>
+              <td>Evoluciones</td>
+              <td>Obstetricia</td>
+              <td><span class="cat-badge">Ginecológico</span></td>
+            </tr>
+            <tr>
+              <td>19/11/2018</td>
+              <td class="hallazgo-cell"><strong>Fractura metatarsianos</strong> por traumatismo</td>
+              <td>Evoluciones</td>
+              <td>Ortopedia</td>
+              <td><span class="cat-badge">Traumatológico</span></td>
+            </tr>
+            <tr>
+              <td>03/12/2020</td>
+              <td class="hallazgo-cell"><strong>Mordedura de gato</strong> en mano</td>
+              <td>Evoluciones</td>
+              <td>Medicina F.</td>
+              <td><span class="cat-badge">Infeccioso</span></td>
+            </tr>
+            <tr>
+              <td>01/10/2021</td>
+              <td class="hallazgo-cell"><strong>COVID-19</strong> leve (hisopado neg)</td>
+              <td>Evoluciones</td>
+              <td>Emergencias</td>
+              <td><span class="cat-badge">Infeccioso</span></td>
+            </tr>
+            <tr>
+              <td>10/06/2018</td>
+              <td class="hallazgo-cell"><strong>Reacción alérgica periorbitaria</strong></td>
+              <td>Evoluciones</td>
+              <td>Clínica Méd.</td>
+              <td><span class="cat-badge">Dermatológico</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sentinel-block">
+        <div class="sentinel-title">DROGAS CENTINELA DETECTADAS</div>
+        <ul class="sentinel-list">
+          <li>
+            <span class="drug-name">✅ Sertralina 50 mg</span>
+            <span class="drug-detail">(antidepresivo ISRS) — Diagnóstico: Trastorno depresivo mayor</span>
+          </li>
+          <li>
+            <span class="drug-name">✅ Risperidona 0.5 mg</span>
+            <span class="drug-detail">(antipsicótico atípico) — Diagnóstico: Trastorno depresivo con síntomas psicóticos/ansiosos</span>
+          </li>
+          <li>
+            <span class="drug-name">✅ Clonazepam 0.5 mg</span>
+            <span class="drug-detail">(benzodiacepina) — Diagnóstico: Crisis de pánico, ansiedad severa</span>
+          </li>
+          <li>
+            <span class="drug-name">✅ Eszopiclona 2 mg</span>
+            <span class="drug-detail">(hipnótico) — Diagnóstico: Insomnio crónico asociado a trastorno psiquiátrico</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="section-title">PENDIENTE VALIDAR CON AMPS / AUDITOR</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span> <span>Verificar <strong>adherencia actual</strong> a tratamiento psiquiátrico y seguimiento ambulatorio</span></li>
+        <li><span class="check-box"></span> <span>Solicitar <strong>informe psiquiátrico actualizado</strong> del Dr. Araujo (último control documentado: 2021)</span></li>
+        <li><span class="check-box"></span> <span>Evaluar <strong>riesgo suicida actual</strong> y necesidad de acompañamiento permanente</span></li>
+        <li><span class="check-box"></span> <span>Cruzar <strong>antecedente de consumo de sustancias</strong> con declaración jurada</span></li>
+        <li><span class="check-box"></span> <span>Verificar <strong>estado nutricional actual</strong> y necesidad de seguimiento por bajo peso crónico</span></li>
+        <li><span class="check-box"></span> <span>Confirmar <strong>resolución de hernia umbilical</strong> o plan quirúrgico pendiente</span></li>
+        <li><span class="check-box"></span> <span>Solicitar <strong>estudios de anemia</strong> actualizados (último: 2024, ferritina 30.9 ng/mL)</span></li>
+        <li><span class="check-box"></span> <span>Evaluar <strong>impacto de antecedentes obstétricos</strong> (hiperemesis, aborto) en futuros embarazos</span></li>
+      </ul>
+
+      <div class="audit-disclaimer">
+        ⚠️ Recomendación de apoyo. Decisión final responsabilidad exclusiva del auditor médico habilitado.
+      </div>
+    `
+  },
+  { // 🟡 CASO 3: INDETERMINADO
+    index: 2,
+    header: { name: "Indeterminado, María", badge: "Actualizada", meta: "ID 2222222 | DNI 27111222 | Titular<br>Solicitud: 6312433<br>Recepción: 25/04/2026 11.45 hs<br>Fecha nacimiento: 14/02/1979" },
+    form: { apellido: "Indeterminado", nombre: "María", dob: "14/02/1979", sexo: "Femenino", doc: "27111222", djNombre: "MARIA INDETERMINADO" },
+    tanaHtml: `
+      <div class="audit-header">
+        <strong>Paciente 2222222</strong><br>
+        Edad: 45 años &nbsp;·&nbsp; Sexo: Femenino &nbsp;·&nbsp; BMI: 28.4 (Sobrepeso) &nbsp;·&nbsp; Fecha: 19/04/2024<br>
+        Evoluciones totales: 12 &nbsp;·&nbsp; Período: 15/01/2019 – 19/04/2024
+      </div>
+
+      <div class="dictamen-block">
+        <div class="dictamen-estado indeterminado">
+          <span class="icon">🟡</span> INDETERMINADO
+        </div>
+        <div class="justificacion-block">
+          <div class="justificacion-label">Justificación</div>
+          Paciente con hipertensión arterial en tratamiento irregular y hallazgo reciente de <strong>nódulo tiroideo en estudio (TIRADS 4)</strong>.<br><br>
+          Requiere validación de adherencia al tratamiento y resultados de estudios complementarios pendientes (PAAF) para definir el riesgo de manera concluyente y descartar patología oncológica.
+        </div>
+      </div>
+
+      <div class="risk-section">
+        <div class="risk-section-header critica">Alertas Específicas</div>
+        
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Nódulo tiroideo sólido (TIRADS 4) en estudio - requiere PAAF</strong></span>
+        </div>
+        <div class="alert-block warning">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"><strong>Adherencia irregular al tratamiento antihipertensivo</strong></span>
+        </div>
+      </div>
+
+      <div class="risk-section-header warning" style="color: #92400e; border-bottom: 1px solid #fcd34d; margin-top: 15px;">Hallazgos</div>
+      
+      <div class="risk-section critica">
+        <div class="risk-section-header critica1">🔴 Alto</div>
+        <table class="audit-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hallazgo</th><th>Módulo</th><th>Servicio</th><th>Categoría</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10/04/2024</td>
+              <td class="hallazgo-cell"><strong>Nódulo tiroideo TIRADS 4</strong></td>
+              <td>Imágenes</td>
+              <td>Endocrinología</td>
+              <td><span class="cat-badge">Endocrinología</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="risk-section medio">
+        <div class="risk-section-header medio">🟡 Medio</div>
+        <table class="audit-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hallazgo</th><th>Módulo</th><th>Servicio</th><th>Categoría</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>05/02/2023</td>
+              <td class="hallazgo-cell"><strong>Hipertensión arterial</strong></td>
+              <td>Evoluciones</td>
+              <td>Cardiología</td>
+              <td><span class="cat-badge">Cardiovascular</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sentinel-block">
+        <div class="sentinel-title">DROGAS CENTINELA DETECTADAS</div>
+        <ul class="sentinel-list">
+          <li>
+            <span class="drug-name">✅ Losartán 50 mg</span>
+            <span class="drug-detail">(Antihipertensivo ARA-II) — Diagnóstico: Hipertensión arterial</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="section-title">PENDIENTE VALIDAR CON AMPS / AUDITOR</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span> <span>Solicitar <strong>resultado de Punción Aspiración con Aguja Fina (PAAF)</strong> tiroidea.</span></li>
+        <li><span class="check-box"></span> <span>Validar <strong>control tensional actual</strong> y adherencia a medicación.</span></li>
+      </ul>
+
+      <div class="audit-disclaimer">
+        ⚠️ Recomendación de apoyo. Decisión final responsabilidad exclusiva del auditor médico habilitado.
+      </div>
+    `
+  },
+  { // ⚪ CASO 4: HCE VACÍA
+    index: 3,
+    header: { name: "Vacío, Carlos", badge: "Actualizada", meta: "ID 3333333 | DNI 37111222 | Integrante<br>Solicitud: 6312434<br>Recepción: 26/04/2026 08.15 hs<br>Fecha nacimiento: 22/09/1993" },
+    form: { apellido: "Vacío", nombre: "Carlos", dob: "22/09/1993", sexo: "Masculino", doc: "37111222", djNombre: "CARLOS VACÍO" },
+    tanaHtml: `
+      <div class="audit-header">
+        <strong>Paciente 3333333</strong><br>
+        Edad: 30 años &nbsp;·&nbsp; Sexo: Masculino &nbsp;·&nbsp; BMI: S/D &nbsp;·&nbsp; Fecha: 19/04/2024<br>
+        Evoluciones totales: 0 &nbsp;·&nbsp; Período: Sin registros
+      </div>
+
+      <div class="dictamen-block">
+        <div class="dictamen-estado" style="background:#f3f4f6; border:1px solid #d1d5db; color:#374151;">
+          <span class="icon">⚪</span> HCE VACÍA
+        </div>
+        <div class="justificacion-block" style="background:#f9fafb; border-color:#d1d5db;">
+          <div class="justificacion-label" style="color:#4b5563;">Justificación</div>
+          No se registran evoluciones, estudios complementarios ni prescripciones en la Historia Clínica Electrónica para este paciente. No es posible realizar una auditoría de riesgo automatizada basada en datos.
+        </div>
+      </div>
+
+      <div class="risk-section">
+        <div class="risk-section-header" style="color: #4b5563; border-bottom: 1px solid #d1d5db;">Alertas Específicas</div>
+        <div class="alert-block" style="background:#f3f4f6; border-left:3px solid #9ca3af;">
+          <span class="alert-icon">ℹ️</span>
+          <span class="alert-text" style="color:#4b5563;"><strong>Ausencia total de registros médicos en el sistema central.</strong></span>
+        </div>
+      </div>
+
+      <div class="section-title">PENDIENTE VALIDAR CON AMPS / AUDITOR</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span> <span>Requerir <strong>Declaración Jurada de Salud completa</strong> al postulante.</span></li>
+        <li><span class="check-box"></span> <span>Considerar <strong>entrevista médica de preingreso presencial</strong>.</span></li>
+      </ul>
+
+      <div class="audit-disclaimer">
+        ⚠️ Recomendación de apoyo. Decisión final responsabilidad exclusiva del auditor médico habilitado.
+      </div>
+    `
+  }
+];
+
+let currentIndex = 0; // Empezamos en Gorosito (Caso 2)
+let currentTanaOutput = casosAudit[currentIndex].tanaHtml; 
+
+function renderCaso(idx) {
+  const caso = casosAudit[idx];
+  
+  // 1. UI - Actualizar Carrusel y Cabecera
+  document.getElementById('case-indicator').textContent = `Caso ${idx + 1} de 4`;
+  document.getElementById('header-patient-name').innerHTML = `${caso.header.name} <span class="badge">${caso.header.badge}</span>`;
+  document.getElementById('header-patient-meta').innerHTML = caso.header.meta;
+
+  // 2. UI - Actualizar Inputs
+  document.getElementById('input-apellido').value = caso.form.apellido;
+  document.getElementById('input-nombre').value = caso.form.nombre;
+  document.getElementById('input-dj-nombre').value = caso.form.djNombre;
+  document.getElementById('input-sexo').value = caso.form.sexo;
+  document.getElementById('input-doc').value = caso.form.doc;
+
+  // 3. Guardar el HTML de este caso
+  currentTanaOutput = caso.tanaHtml;
+  
+  // 4. ✨ RESETEO COMPLETO DEL PANEL Y EL FEEDBACK ✨
+  const btnTanaM2 = document.getElementById('btn-tana-m2');
+  const panelM2   = document.getElementById('tana-panel-m2');
+  
+  if (btnTanaM2 && panelM2) {
+      // Ocultar panel y mostrar botón
+      panelM2.style.display = 'none';
+      panelM2.classList.remove('open');
+      btnTanaM2.style.display = 'flex';
+      
+      // Limpiar contenido
+      const contentEl = panelM2.querySelector('.tana-content');
+      if (contentEl) {
+          contentEl.innerHTML = ''; 
+          contentEl.style.display = 'none'; // Ocultar el contenido hasta que se vuelva a ejecutar
+      }
+      
+      // Ocultar acciones
+      const actionEl = panelM2.querySelector('.tana-actions');
+      if(actionEl){
+          actionEl.style.display = 'none';
+      }
+
+      // **AQUÍ ESTÁ EL TRUCO PARA EL FEEDBACK:** // Ocultamos el bloque completo del feedback para que no queden los dedos volando
+      const feedbackEl = panelM2.querySelector('.tana-feedback');
+      if (feedbackEl) {
+          feedbackEl.style.display = 'none';
+      }
+
+      // Si existe la función resetFeedback, la llamamos para limpiar el estado interno
+      if (typeof resetFeedback === "function") {
+          resetFeedback(panelM2);
+      }
+  }
+}
+
+document.getElementById('btn-next').addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % casosAudit.length;
+  renderCaso(currentIndex);
+});
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + casosAudit.length) % casosAudit.length;
+  renderCaso(currentIndex);
+});
+
+// Inicializamos la vista
+renderCaso(currentIndex);
 
 </script>
 
