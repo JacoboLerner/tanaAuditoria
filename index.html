@@ -707,6 +707,32 @@
     display: flex;
     gap: 4px;
   }
+  /* Estilos para el nuevo menú desplegable de feedback */
+.feedback-legend {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.feedback-select {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.feedback-select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 2px var(--teal-light);
+}
   .feedback-btn {
     background: none;
     border: 1px solid #e5e7eb;
@@ -1460,8 +1486,21 @@
     </div>
     <div class="modal-field">
       <label>Comentario</label>
-      <textarea id="modal-comentario" placeholder="Describí el problema o sugerencia…"></textarea>
+
+
+<select class="feedback-select" id="feedback-category" aria-label="Categoría del comentario">
+  <option value="" disabled selected>Selecciona un motivo (Opcional)</option>
+  <option value="inexacto">Información inexacta</option>
+  <option value="incompleto">Falta información relevante</option>
+  <option value="formato">Problema de formato o visualización</option>
+  <option value="otro">Otro motivo</option>
+</select>
+
+<textarea id="modal-comentario" id="feedback-text" class="feedback-textarea" placeholder="Añade más detalles sobre tu evaluación... (Obligatorio)" required></textarea>
     </div>
+          <div class="feedback-legend">
+  Tu comentario ayudará al Departamento de Informática en Salud a mejorar la calidad y utilidad de esta herramienta.
+</div>
 
     <div class="modal-actions">
       <button class="modal-btn modal-btn-cancel" id="modal-cancel">Cancelar</button>
