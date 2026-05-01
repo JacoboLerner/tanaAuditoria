@@ -1209,6 +1209,21 @@
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Animación para incentivar el comentario */
+@keyframes shake-and-glow {
+  0%, 100% { transform: translateX(0); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+.pedir-feedback-urgente {
+  animation: shake-and-glow 0.8s ease-in-out;
+  background-color: #fef2f2 !important; /* Fondo rojizo suave */
+  border-color: #f87171 !important;     /* Borde rojo */
+  color: #b91c1c !important;            /* Texto rojo oscuro */
+  transition: all 0.3s ease;
+}
 </style>
 </head>
 <body>
@@ -2016,11 +2031,22 @@ function resetFeedback(panel) {
  */
 function initFeedback(panel) {
   const btns = panel.querySelectorAll('.feedback-btn');
+  // 1. Buscamos el botón de comentario dentro del mismo panel
+  const btnComentario = panel.querySelector('.feedback-comment-link');
+
+  // OPCIONAL: Si el usuario hace clic en el botón de comentario mientras está animado, apagamos la alerta
+  if (btnComentario) {
+    btnComentario.addEventListener('click', () => {
+      btnComentario.classList.remove('pedir-feedback-urgente');
+      btnComentario.innerHTML = "Dejar comentario"; // Restauramos el texto original por seguridad
+    });
+  }
+
   btns.forEach(btn => {
     btn.addEventListener('click', () => {
       const isPositive = btn.dataset.value === 'positive';
       const activeClass = isPositive ? 'active-positive' : 'active-negative';
-      const otherClass  = isPositive ? 'active-negative' : 'active-positive';
+      // const otherClass  = isPositive ? 'active-negative' : 'active-positive'; // (No se usaba en tu código final, la podemos omitir)
 
       if (btn.classList.contains(activeClass)) {
         // Toggle off
@@ -2029,6 +2055,27 @@ function initFeedback(panel) {
         // Activar este, desactivar el otro
         btns.forEach(b => b.classList.remove('active-positive', 'active-negative'));
         btn.classList.add(activeClass);
+
+        // ✨ NUEVA LÓGICA: Si es negativo (Pulgar abajo), animamos el botón de comentario
+        if (!isPositive && btnComentario) {
+          // Evitamos que se buguee si el usuario hace clic varias veces rápido
+          if (!btnComentario.classList.contains('pedir-feedback-urgente')) {
+            const textoOriginal = btnComentario.innerHTML;
+            
+            // Agregamos la clase de CSS que creaste
+            btnComentario.classList.add('pedir-feedback-urgente');
+            btnComentario.innerHTML = "Contanos qué falló";
+            
+            // A los 4 segundos, volvemos a la normalidad
+            setTimeout(() => {
+              if (btnComentario.classList.contains('pedir-feedback-urgente')) {
+                btnComentario.classList.remove('pedir-feedback-urgente');
+                btnComentario.innerHTML = textoOriginal;
+              }
+            }, 3000);
+          }
+        }
+        
       }
     });
   });
